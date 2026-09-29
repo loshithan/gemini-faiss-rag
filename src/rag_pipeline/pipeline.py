@@ -1,40 +1,57 @@
+from google.genai import errors, types
 
-from .embedder import embed_text
-from .store import create_faiss_index, search_query_in_index
-def answer_question(question, context):
+from .config import GENERATION_MODEL, TOP_K
+from .embedder import embed_text, get_client
+from .store import VectorStore
+
+SYSTEM_INSTRUCTION = (
+    "You answer questions using only the context passages provided. "
+    "Do not use outside knowledge. "
+    "If the context does not contain the answer, reply exactly: \"I don't know based on the provided documents.\""
+)
+
+
+def build_prompt(question: str, chunks: list[dict]) -> str:
     """
-    Answer a question based on the provided context.
+    Build a prompt that puts the retrieved chunks before the question.
+
+    Args:
+        question (str): The user's question.
+        chunks (list[dict]): The retrieved chunks.
+
+    Returns:
+        str: The prompt text.
+    """
+    context = "\n\n".join(f"[{chunk['chunk_id']}]\n{chunk['text']}" for chunk in chunks)
+    return f"Context:\n{context}\n\nQuestion: {question}\nAnswer:"
+
+
+def answer_question(question: str, store: VectorStore, top_k: int = TOP_K) -> dict:
+    """
+    Answer a question using chunks retrieved from the store.
 
     Args:
         question (str): The question to be answered.
-        context (str): The context in which to find the answer.
+        store (VectorStore): The index to retrieve context from.
+        top_k (int): The number of chunks to retrieve. Default is config.TOP_K.
 
     Returns:
-        str: The answer to the question.
+        dict: {"answer": str, "chunks": list of (chunk, score) pairs used as context}.
     """
-    # Combine the question and context into a single prompt
-    prompt = f"Context: {context}\n\nQuestion: {question}\nAnswer:"
+    results = store.search(embed_text(question), top_k=top_k)
+    if not results:
+        return {"answer": "No documents are indexed.", "chunks": []}
 
-    # Use the embedding model to generate an answer
-    answer_embedding = embed_text(prompt)
+    prompt = build_prompt(question, [chunk for chunk, _ in results])
+    try:
+        response = get_client().models.generate_content(
+            model=GENERATION_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(system_instruction=SYSTEM_INSTRUCTION, temperature=0),
+        )
+    except errors.APIError as e:
+        raise RuntimeError(f"Generation request failed ({e.code}): {e.message}") from e
 
-    # Create a FAISS index for the context embeddings
-    context_embedding = embed_text(context)
-    index = create_faiss_index([context_embedding])
-
-    # Search for the most similar embedding to the answer
-    results = search_query_in_index(answer_embedding, index)
-
-    # Return the most similar context as the answer
-    if results:
-        return context
-    else:
-        return "No relevant context found."
-
-if __name__ == "__main__":
-    # Example usage
-    question = "What is the color of the sky?"
-    context = "The sky is blue during the day and can appear red or orange during sunrise and sunset."
-
-    answer = answer_question(question, context)
-    print(f"Question: {question}\nAnswer: {answer}")
+    # response.text is None when the model returns no text (e.g. a blocked response)
+    answer = response.text or "The model returned no answer."
+    return {"answer": answer.strip(), "chunks": results}

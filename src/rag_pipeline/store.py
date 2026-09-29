@@ -1,34 +1,59 @@
-import faiss,numpy as np
-from .embedder import compute_cosine_similarity
+import faiss
+import numpy as np
 
-def create_faiss_index(embeddings: list[list[float]]) -> faiss.IndexFlatL2:
+from .config import EMBEDDING_DIM, TOP_K
+
+
+class VectorStore:
     """
-    Create a FAISS index from a list of embedding vectors.
-
-    Args:
-        embeddings (list[list[float]]): A list of embedding vectors.
-        dimension (int): The dimension of the embedding vectors.
-
-    Returns:
-        faiss.IndexFlatL2: A FAISS index.
+    A FAISS inner-product index over L2-normalized vectors (i.e. cosine similarity),
+    plus a parallel list so that vector i in the index maps to self.chunks[i].
     """
-    dimension = len(embeddings[0]) if embeddings else 0
-    index = faiss.IndexFlatL2(dimension)
-    index.add(np.array(embeddings, dtype=np.float32))
-    return index    
 
-def search_query_in_index(query_embedding: list[float], index: faiss.IndexFlatL2, top_k: int = 5) -> list[tuple[int, float]]:
-    """
-    Search for the top K most similar embeddings in the FAISS index for a given query embedding.
+    def __init__(self, dimension: int = EMBEDDING_DIM):
+        self.dimension = dimension
+        self.index = faiss.IndexFlatIP(dimension)
+        self.chunks: list[dict] = []
 
-    Args:
-        query_embedding (list[float]): The query embedding vector.
-        index (faiss.IndexFlatL2): The FAISS index to search in.
-        top_k (int): The number of top results to return. Default is 5.
+    def __len__(self) -> int:
+        return self.index.ntotal
 
-    Returns:
-        list[tuple[int, float]]: A list of tuples containing the indices and distances of the top K results.
-    """
-    query_vector = np.array([query_embedding], dtype=np.float32)
-    distances, indices = index.search(query_vector, top_k)
-    return [(int(idx), float(dist)) for idx, dist in zip(indices[0], distances[0])]
+    def _to_normalized_matrix(self, embeddings: list[list[float]]) -> np.ndarray:
+        vectors = np.array(embeddings, dtype=np.float32)
+        if vectors.ndim != 2 or vectors.shape[1] != self.dimension:
+            raise ValueError(f"Expected vectors of dimension {self.dimension}, got shape {vectors.shape}")
+        faiss.normalize_L2(vectors)  # in place
+        return vectors
+
+    def add(self, chunks: list[dict], embeddings: list[list[float]]) -> None:
+        """
+        Add chunks and their embeddings. Both lists must be in the same order.
+
+        Args:
+            chunks (list[dict]): The chunks that were embedded.
+            embeddings (list[list[float]]): One embedding per chunk.
+        """
+        if len(chunks) != len(embeddings):
+            raise ValueError(f"Got {len(chunks)} chunks but {len(embeddings)} embeddings")
+        if not chunks:
+            return
+        self.index.add(self._to_normalized_matrix(embeddings))
+        self.chunks.extend(chunks)
+
+    def search(self, query_embedding: list[float], top_k: int = TOP_K) -> list[tuple[dict, float]]:
+        """
+        Find the chunks most similar to a query embedding.
+
+        Args:
+            query_embedding (list[float]): The query embedding vector.
+            top_k (int): The number of results to return. Default is config.TOP_K.
+
+        Returns:
+            list[tuple[dict, float]]: (chunk, cosine similarity) pairs, best first.
+        """
+        if len(self) == 0:
+            return []
+        query = self._to_normalized_matrix([query_embedding])
+        scores, indices = self.index.search(query, min(top_k, len(self)))
+        # FAISS pads with -1 when it has fewer results than requested
+        return [(self.chunks[i], float(s)) for i, s in zip(indices[0], scores[0]) if i != -1]

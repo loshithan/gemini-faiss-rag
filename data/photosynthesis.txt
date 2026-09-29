@@ -1,0 +1,43 @@
+Photosynthesis: How Plants Turn Light into Food
+
+Photosynthesis is the process by which plants, algae and some bacteria convert light energy into chemical energy stored in sugar. It takes in carbon dioxide and water and, using energy from sunlight, produces glucose and oxygen. The overall reaction is usually summarized as: six molecules of carbon dioxide plus six molecules of water, with light energy, yield one molecule of glucose and six molecules of oxygen (6CO2 + 6H2O -> C6H12O6 + 6O2). Almost all life on Earth depends on this process, either directly for food or indirectly through the oxygen it releases into the atmosphere.
+
+Where Photosynthesis Happens
+
+In plants, photosynthesis takes place inside chloroplasts, small organelles found mainly in the cells of leaves. A single leaf cell can contain dozens of chloroplasts. Each chloroplast has an outer and inner membrane surrounding a fluid called the stroma. Suspended in the stroma are flattened, disc-shaped sacs called thylakoids, which are arranged in stacks known as grana. The thylakoid membranes hold the pigments and proteins that capture light, while the stroma contains the enzymes that build sugar.
+
+Carbon dioxide enters the leaf through tiny pores called stomata, usually found on the underside of the leaf. Water is absorbed by the roots and carried up to the leaves through vessels called xylem. The oxygen produced during photosynthesis leaves the plant through the same stomata.
+
+The Role of Chlorophyll
+
+The main light-capturing pigment is chlorophyll, which comes in two common forms, chlorophyll a and chlorophyll b. Chlorophyll absorbs mostly blue light and red light and reflects green light, which is why most leaves look green. Other pigments, called carotenoids, absorb additional wavelengths and help protect the plant from damage caused by too much light. In autumn, when chlorophyll breaks down, the yellow and orange colors of the carotenoids become visible.
+
+Stage One: The Light-Dependent Reactions
+
+Photosynthesis happens in two main stages. The first stage, the light-dependent reactions, takes place in the thylakoid membranes. Light energy is absorbed by two groups of pigments and proteins called Photosystem II and Photosystem I. Despite the numbering, Photosystem II acts first. At Photosystem II, water molecules are split in a step called photolysis. Splitting water releases electrons, hydrogen ions and oxygen gas. This is the source of the oxygen that plants release.
+
+The energized electrons pass along an electron transport chain, which pumps hydrogen ions into the thylakoid space. As those ions flow back out through an enzyme called ATP synthase, the cell produces ATP. At the end of the chain, Photosystem I re-energizes the electrons, and they are used to make NADPH. ATP and NADPH are energy carriers that power the second stage.
+
+Stage Two: The Calvin Cycle
+
+The second stage is the Calvin cycle, also called the light-independent reactions, and it takes place in the stroma. Here the plant uses ATP and NADPH to turn carbon dioxide into sugar. The key enzyme is RuBisCO, which attaches carbon dioxide to a five-carbon molecule called RuBP. This step is known as carbon fixation. The resulting molecules are rearranged into a three-carbon sugar called G3P, some of which is used to build glucose while the rest regenerates RuBP so the cycle can continue. Making one molecule of glucose requires six turns of the cycle and uses 18 ATP and 12 NADPH.
+
+RuBisCO is thought to be the most abundant protein on Earth. It is also slow and sometimes grabs oxygen instead of carbon dioxide, a wasteful process called photorespiration that becomes more common in hot, dry conditions.
+
+The cycle is named after the American chemist Melvin Calvin, who mapped its steps using radioactive carbon-14 and received the Nobel Prize in Chemistry in 1961 for this work.
+
+Adaptations: C4 and CAM Plants
+
+Some plants have evolved ways to reduce photorespiration. C4 plants, such as maize and sugarcane, first capture carbon dioxide using a different enzyme, PEP carboxylase, and then deliver it concentrated to RuBisCO in separate cells. CAM plants, such as cacti and pineapples, open their stomata only at night to take in carbon dioxide and store it, then close their stomata during the day to save water while the Calvin cycle runs.
+
+Factors That Affect the Rate of Photosynthesis
+
+Three main factors control how fast photosynthesis happens: light intensity, carbon dioxide concentration and temperature. Increasing any one of them speeds up photosynthesis only until another factor becomes the limit. This idea, known as the principle of limiting factors, was described by the British plant physiologist Frederick Blackman in 1905. Very high temperatures slow photosynthesis because the enzymes involved, including RuBisCO, stop working properly.
+
+A Brief History of Discovery
+
+In 1771, the English scientist Joseph Priestley found that a sprig of mint placed in a sealed jar could restore air in which a candle had burned out, showing that plants release something that supports burning. In 1779, the Dutch scientist Jan Ingenhousz showed that plants do this only in the presence of light, and only through their green parts.
+
+Why It Matters
+
+Photosynthesis is the foundation of most food chains and the source of the oxygen in the air we breathe. Tiny marine organisms called phytoplankton carry out roughly half of all photosynthesis on Earth. Photosynthesis also removes carbon dioxide from the atmosphere, which makes forests and oceans important in regulating the climate. The fossil fuels burned today, such as coal and oil, are made from the remains of ancient organisms whose energy originally came from photosynthesis.

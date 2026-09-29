@@ -47,7 +47,12 @@ def answer_question(question: str, store: VectorStore, top_k: int = TOP_K) -> di
         response = get_client().models.generate_content(
             model=GENERATION_MODEL,
             contents=prompt,
-            config=types.GenerateContentConfig(system_instruction=SYSTEM_INSTRUCTION, temperature=0),
+            config=types.GenerateContentConfig(
+                system_instruction=SYSTEM_INSTRUCTION,
+                temperature=0,
+                # No tools are used, so turn off automatic function calling (also silences the SDK's AFC warning)
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+            ),
         )
     except errors.APIError as e:
         raise RuntimeError(f"Generation request failed ({e.code}): {e.message}") from e

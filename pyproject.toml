@@ -1,7 +1,7 @@
 [project]
 name = "rag-pipeline"
 version = "0.1.0"
-description = "Add your description here"
+description = "A minimal RAG pipeline built from scratch with Gemini embeddings and FAISS vector search"
 readme = "README.md"
 authors = [
     { name = "loshithan invorg", email = "lparamaguru@invorg.com" }
